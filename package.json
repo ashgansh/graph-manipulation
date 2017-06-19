@@ -4,9 +4,11 @@
   "private": true,
   "dependencies": {
     "faker": "^4.1.0",
+    "immutable": "^3.8.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-graph-vis": "^0.1.2"
+    "react-graph-vis": "^0.1.2",
+    "styled-components": "^2.1.0"
   },
   "devDependencies": {
     "react-scripts": "1.0.7"
