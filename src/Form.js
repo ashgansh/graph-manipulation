@@ -2,17 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 // import { load as loadAccount } from './account';
-const data = {
-  // used to populate "account" reducer when "Load" is clicked
-  firstName: 'Jane',
-  lastName: 'Doe',
-  age: '42',
-  sex: 'female',
-  employed: true,
-  favoriteColor: 'Blue',
-  bio: 'Born to write amazing Redux code.',
-};
-const colors = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet'];
+
 
 const renderField = (attribute, index) => {
 
@@ -46,6 +36,7 @@ let  InitializeFromStateForm = ({ initialValues, handleSubmit, load, pristine, r
 // Decorate with reduxForm(). It will read the initialValues prop provided by connect()
 InitializeFromStateForm = reduxForm({
   form: 'initializeFromState', // a unique identifier for this form
+enableReinitialize: true
 })(InitializeFromStateForm);
 
 // You have to connect() to any reducers that you wish to connect to yourself
