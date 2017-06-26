@@ -25,32 +25,23 @@ class App extends Component {
     this.state = {
       nodes: convertedNodes,
       edges: graph.edges,
-      selectedNode: 0
+      currentNode: {},
     }
   }
 
-  onAdd = () => {
-    const exampleNode = {
-      id: faker.random.number(),
-      label: faker.name.firstName(),
-      color: "#e0df41"
-    }
-    this.setState(({nodes}) => ({
-      nodes: nodes.push(exampleNode)
-    }))
-  }
-
-  getNodeIndex = (nodes, selectedNode) =>
-    nodes.findIndex(item => item.get("id") === selectedNode)
-
-  updateNode = (nodes, selectedNode) => {
-    return nodes.update(this.getNodeIndex(nodes, selectedNode), item =>
-      item.set("label", "poiwuer")
-    )
-  }
 
   handleSubmit = values => {
     this.setState(({nodes}) => ({nodes: set(nodes, values.id, values)}))
+  }
+
+  addField = () => {
+    this.setState(({currentNode}) => ({currentNode: Object.assign(currentNode, { gender: 'male' })}))
+  }
+
+  handleCreate = event => {
+    const uuid = faker.random.uuid()
+    this.setState(({nodes}) => ({nodes: set(nodes, uuid, { id: uuid, label: '' })}))
+    this.forceUpdate()
   }
 
   render() {
@@ -59,16 +50,17 @@ class App extends Component {
       edges: this.state.edges
     }
 
-    const selectNode = node => this.setState(() => ({selectedNode: node}))
+    const selectNode = selectedNode => this.setState(({nodes}) => ({currentNode: nodes[selectedNode]}))
+
     let events = {
       select: event => {
         const {nodes} = event
-        console.log(nodes)
         selectNode(nodes[0])
       }
     }
 
-    const currentNode = this.state.nodes[this.state.selectedNode]
+    const { currentNode } = this.state;
+
     return (
       <Provider store={store}>
         <Container>
@@ -77,7 +69,8 @@ class App extends Component {
             <Form
               onSubmit={this.handleSubmit}
               initialValues={currentNode}
-              currentNode={currentNode}
+              handleCreate={this.handleCreate}
+              addField={this.addField}
             />
           </div>
         </Container>
