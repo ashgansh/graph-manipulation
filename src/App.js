@@ -25,7 +25,7 @@ class App extends Component {
     this.state = {
       nodes: convertedNodes,
       edges: graph.edges,
-      currentNode: {},
+      currentNode: null,
     }
   }
 
