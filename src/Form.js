@@ -2,9 +2,16 @@ import React from "react"
 import {connect} from "react-redux"
 import {Field, reduxForm} from "redux-form"
 import {Input, Button} from "semantic-ui-react"
+import styled from 'styled-components';
+
+const FieldWrapper = styled.div`
+  margin-bottom: 12px;
+` 
 
 const InputField = ({ input, meta, ...rest }) =>
+  <FieldWrapper>
   <Input {...input} {...rest} />
+</FieldWrapper>
 
     const renderField = (attribute, index) => {
       return (
@@ -29,7 +36,6 @@ let NodeForm = ({
   addField,
 
 }) => {
-  console.log(initialValues)
   if (!initialValues || Object.keys(initialValues).length === 0) {
     return <Button primary onClick={(event) => handleCreate(event)}y>Create</Button>
   }
