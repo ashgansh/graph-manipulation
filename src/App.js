@@ -6,6 +6,7 @@ import {Provider} from "react-redux"
 import store from "./store"
 import Form from "./Form"
 import set from "lodash/set"
+import { Container } from 'semantic-ui-react'
 
 function toKeyValue(listOfObjects) {
   let obj = {}
@@ -70,14 +71,16 @@ class App extends Component {
     const currentNode = this.state.nodes[this.state.selectedNode]
     return (
       <Provider store={store}>
-        <div style={{ margin: 24 }}>
-          <Graph graph={graphe} options={options} events={events} />
-          <Form
-            onSubmit={this.handleSubmit}
-            initialValues={currentNode}
-            currentNode={currentNode}
-          />
-        </div>
+        <Container>
+          <div style={{ margin: 24 }}>
+            <Graph graph={graphe} options={options} events={events} />
+            <Form
+              onSubmit={this.handleSubmit}
+              initialValues={currentNode}
+              currentNode={currentNode}
+            />
+          </div>
+        </Container>
       </Provider>
     )
   }
