@@ -1,10 +1,10 @@
 import React, {Component} from "react"
 import Graph from "./graph"
-import faker from "faker"
 import {options, graph} from "./fixtures"
 import {Provider} from "react-redux"
 import store from "./store"
 import Form from "./Form"
+import PropertyForm from "./PropertyForm"
 import set from "lodash/set"
 import { Container } from 'semantic-ui-react'
 
@@ -21,11 +21,11 @@ function toPlainList(object) {
 class App extends Component {
   constructor(props) {
     super(props)
-    const convertedNodes = toKeyValue(graph.nodes)
+    const convertedNodes = toKeyValue(graph.nodes);
     this.state = {
       nodes: convertedNodes,
       edges: graph.edges,
-      currentNode: null,
+      selectedNode: 0,
     }
   }
 
@@ -34,15 +34,16 @@ class App extends Component {
     this.setState(({nodes}) => ({nodes: set(nodes, values.id, values)}))
   }
 
-  addField = () => {
-    this.setState(({currentNode}) => ({currentNode: Object.assign(currentNode, { gender: 'male' })}))
+  handleAddProperty = ({nodeKey, nodeValue}) => {
+
+    this.setState(({nodes, selectedNode}) => {
+      const newValue = Object.assign(nodes[selectedNode], {[nodeKey]: nodeValue})
+      console.log(nodes[selectedNode], 'selectedNode')
+      console.log(newValue, 'newVa')
+      return ({nodes: set(nodes, selectedNode, newValue)})
+    })
   }
 
-  handleCreate = event => {
-    const uuid = faker.random.uuid()
-    this.setState(({nodes}) => ({nodes: set(nodes, uuid, { id: uuid, label: '' })}))
-    this.forceUpdate()
-  }
 
   render() {
     const graphe = {
@@ -50,8 +51,12 @@ class App extends Component {
       edges: this.state.edges
     }
 
-    const selectNode = selectedNode => this.setState(({nodes}) => ({currentNode: nodes[selectedNode]}))
+    const selectNode = nodeID => {
+      return this.setState(({nodes}) => ({selectedNode: nodeID}))
+    }
 
+    // this is were we receive the events from vis
+    // refer to vis documentation for additional information
     let events = {
       select: event => {
         const {nodes} = event
@@ -59,7 +64,10 @@ class App extends Component {
       }
     }
 
-    const { currentNode } = this.state;
+    // curly braces are a way to destructure objects in js (es6 <)
+    const { selectedNode, nodes } = this.state;
+    const currentNode = nodes[selectedNode]
+    console.log(currentNode)
 
     return (
       <Provider store={store}>
@@ -69,9 +77,13 @@ class App extends Component {
             <Form
               onSubmit={this.handleSubmit}
               initialValues={currentNode}
-              handleCreate={this.handleCreate}
-              addField={this.addField}
             />
+            { currentNode &&
+                <PropertyForm
+                  onSubmit={this.handleAddProperty}
+                  initialValues={currentNode}
+                />
+            }
           </div>
         </Container>
       </Provider>

@@ -12,7 +12,7 @@ const ButtonWrapper = styled.div`
 
 const FieldWrapper = ButtonWrapper.extend`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 `
 
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
@@ -23,21 +23,24 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 
 
 
-let NodeForm = (props) => {
-  const { handleSubmit, pristine, reset, submitting, initialValues } = props;
+let PropertyForm = (props) => {
+  const { handleSubmit, pristine, reset, submitting } = props;
   return (
     <form onSubmit={handleSubmit}>
+      Add Property
       <FieldWrapper>
-        {initialValues && Object.keys(initialValues).map((attribute, index) => attribute !=='id' && 
           <Field
-            key={index}
-            name={attribute}
+            name="nodeKey"
             type="text"
             component={renderField}
-            label={attribute}
+            label="Key"
           />
-        )
-        }
+          <Field
+            name="nodeValue"
+            type="text"
+            component={renderField}
+            label="Value"
+          />
       </FieldWrapper>
       <ButtonWrapper>
         <Button type="submit" disabled={submitting}>Submit</Button>
@@ -49,11 +52,11 @@ let NodeForm = (props) => {
   );
 };
 
-NodeForm = reduxForm({
-  form: 'NodeForm', // a unique identifier for this form
+PropertyForm = reduxForm({
+  form: 'PropertyForm', // a unique identifier for this form
   enableReinitialize: true,
-})(NodeForm);
+})(PropertyForm);
 
-NodeForm = connect()(NodeForm)
+PropertyForm = connect()(PropertyForm)
 
-export default NodeForm
+export default PropertyForm
